@@ -1,0 +1,87 @@
+=============================================
+------------------>Docker<-------------------
+=============================================
+
+What is docker? 
+Devops one of the tool
+microservice		--> monolythics
+containerzation
+
+What is hypervisor?
+
+what is virtualization?
+ 
+
+different between docker vs Vmware?
+
+docker					|	vm ware
+need base os			| 	we don't need base os 
+no os guest dependent	|	os dependent
+instantly login (cmd)		|	its complicated
+docker engine			|	hypervisor/vmware
+
+
+
+DOCKER 
+
+
+dockerfile ---> Build ---> dockerimage ---> run ---> docker container ---> exec
+"file  / image / container"
+
+
+DOCKER HUB
+
+docker-hub
+docker-lab ---> docker-file ---> build 
+
+Dockerfile --> Build --> Docker image ( docker hub / local )
+docker hub/local 
+Docker image --> Run --> Docker Container 
+
+docker lab
+
+image --> run --> container
+
+
+file ---> build ---> run 
+#apt install docker.io -y
+#docker images 	[showing images]
+#docker ps		[showing containers ps-process status]
+#docker run -itd --name apache -p "5050:80" httpd[internal terminal detach]
+#docker exec -it adba5c56d28d  /bin/bash
+#exit
+#docker stop 	{id}
+#docker ps -a 	[showing all continer runing  and stoped]
+#docker ps    	[only showind running containers]
+#docker ps -a 	[its show all containers]
+#docker start 	{id}
+#docker rm -f 	[if container running or stoped if you use this command it should be deleted]
+#docker rmi 		{image name,,,}
+
+
+
+=================
+
+#docker run -itd --name apache -p "5050:80" httpd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

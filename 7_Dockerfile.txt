@@ -1,0 +1,210 @@
+Dockerfile : 
+A text file with instructions to build image
+Automation of Docker Image Creation
+
+Docker follows layered architecture which caches each step so that next time it uses details from cache
+
+FROM
+RUN
+CMD
+
+Step 1 : Create a file named Dockerfile
+
+Step 2 : Add instructions in Dockerfile
+
+Step 3 : Build dockerfile to create image
+
+Step 4 : Run image to create container
+
+COMMANDS
+: dockerfile
+    mkdir Dockerfile
+    vi DockerFile
+    docker build . or docker build -t myimg1:1.0
+
+
+FROM ubuntu
+MAINTAINER mani
+RUN apt-get update
+CMD ["echo", "Helloworlf..!"]
+
+: docker run image
+
+
+2. Example 
+
+FROM docker/whalesay:latest
+CMD echo "Imp discussion" | cowsay
+
+Execute :::
+docker build -t new .
+docker ps
+docker images
+docker container run 8a88e68a0c86
+
+3. Example
+
+
+FROM centos
+MAINTAINER mani
+RUN yum install vim git -y
+docker build -t centosvim:v1.0 . ----to build container
+docker run -itd --name=test3 centosvim:v1.0
+docker exec -it containerid /bin/bash
+
+
+apache:
+
+FROM ubuntu
+MAINTAINER santhosh
+RUN apt-get update && apt-get install -y apache2
+RUN mkdir /var/run/apache2
+ENV APACHE_RUN_user www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_RUN_DIR /var/run/apache2 
+EXPOSE 80
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+
+
+
+4. Example
+
+add wget 
+
+FROM centosvim:v1.0
+MAINTAINER mani
+RUN yum install wget  -y
+
+5. Example
+
+
+FROM ubuntu
+MAINTAINER Santhosh
+RUN apt-get update
+RUN apt-get install vim git wget openssh-server -y
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN echo 'root:root123' | chpasswd
+RUN mkdir /var/run/sshd
+CMD ["/usr/sbin/sshd", "-D"]
+EXPOSE 8080
+
+
+***/In order to enable root ssh login on Ubuntu 16.04 Xenial Xerus Linux run the following linux command:
+or manual 
+FROM:
+PermitRootLogin prohibit-password
+TO:
+PermitRootLogin yes ////etc/ssh/sshd_config
+
+** ssh server when starting your container
+
+
+***/The sshd process is started when the system boots. The program is usually located at /usr/sbin/sshd. It runs as root. The initial process acts as the master server that listens to incoming connections. Generally this process is the one with the lowest process id or the one that has been running the longest. It is also the parent process of all the other sshd processes/
+
+ps axjf
+
+
+FROM instruction
+ubuntu argument or command
+
+
+docker push imagename
+
+
+
+6 .Example
+
+
+
+docker run -p 5000:5000 -it ubuntu
+
+Test deployment of app manually in a server
+
+Manual way:
+
+apt-get update
+apt-get install python
+apt-get install curl -y
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+pip install flask
+FLASK_APP=/opt/app.py flask run --host=0.0.0.0
+
+
+Now we are building a dockerfile and packaging application
+
+****app.py code
+
+import os
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def main():
+    return "Welcome!"
+
+@app.route('/how are you')
+def hello():
+    return 'I am good, how about you?'
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
+
+** Dockerfile without exposing port
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y python
+RUN apt-get install curl -y
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python get-pip.py
+RUN pip install flask
+COPY app.py /opt/app.py
+ENTRYPOINT FLASK_APP=/opt/app.py flask run --host=0.0.0.0
+
+docker run -d -it --name=santhosh --mount source=my-vol,destination=/usr/local/apache2/htdocs httpd
+docker save -o ~/name.tar backupconatiner 
+
+
+
+** Dockerfile with port exposed
+
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y python
+RUN apt-get install curl -y
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python get-pip.py
+RUN pip install flask
+COPY app.py /opt/app.py
+EXPOSE 5000
+ENTRYPOINT FLASK_APP=/opt/app.py flask run --host=0.0.0.0
+
+
+Docker push
+
+docker login
+docker tag e74fa5fd3ba2 a9cc83440f7b/maninewwwww
+docker push a9cc83440f7b/maninewwwww
+
+
+
+CMD and Entrypoint(json format):
+
+FROM ubuntu
+CMD ["sleep" ,"4"]
+
+FROM ubuntu
+ENTRYPOINT ["sleep"]
+
+FROM ubuntu
+CMD ["4"]
+ENTRYPOINT ["sleep"]
+
+Layered architecture:
+
+compare docker build -t . 2 times to see the cache done whoch saves disk space
+Images are read only layer -- only need to rebuilt
+container are read and write layer --- log files,changes made inside

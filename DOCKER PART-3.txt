@@ -1,0 +1,113 @@
+------------DOCKER PART-3-----------
+=============================
+APT INSTALL DOCKER.IO
+DOCKER PS - showing containers
+DOCKER IMAGES - showing images
+DOCKER RUN - execute
+DOCKER RM  - removing docker images
+DOCKER START - containers startup 
+DOCKER STOP - container stop
+DOCKER EXEC - container exe
+DOCKER PS -A - showing all containers
+DOCKER PULL - get docker container from docker hub
+DOCKER IMAGES -A its showing all images
+DOCKER -Q only its shows images id
+DOCKER RMI -F $ ( DOCKER IMAGES -A )
+DOCKER RM -F $ (DOCKER PS -A)
+DOCKER IMAGES -A shows docker all images with id
+DOCKER IMAGES -Q  shows docker images id
+DOCKER RMI -F  $ ( docker images -a )
+DOCKER RM -F $ ( docker ps -a -q )
+DOCKER STATS this command uses for container storages
+docker container prune this command used for deleting whole stoped , exited container
+!d,a,c,
+
+
+FROM ubuntu
+MAINTAINER sathish
+RUN apt update -y
+RUN apt install openssh-server vim -y
+RUN sed -i 's/#PermitRootLogin prohibit-password/permitRootLogin yes/ ' /etc/ssh/sshd_config
+RUN echo 'root:root123' | chpasswd
+RUN mkdir /var/run/sshd
+CMD [ "/usr/sbin/sshd",  "-D" ]
+EXPOSE 22
+
+
+
+#docker run -itd --name httpdc1 -p "8000:80" -v  "/usr/local/apache2/logs" httpd
+#docker run -itd --name sshc2 -p "7000:22" --volumes-from httpdc1:ro ssh:001
+#docker run -itd --name ssh -p "7000:22" --volumes-from myapacheserver:ro 
+#docker run -itd --name ssh -p "2001:22" --volumes-from httpdcon-1:ro sshserver:1
+
+login 
+cd /usr/local/apache2/logs = ls -lrta
+shows httpd.pid
+
+unauthorised docker users container only in read only mode
+
+===============================================================================
+
+how to push our image to docker hub?
+
+
+first you have to tag
+ docker tag 7d sathishcloud/ngnixsathish
+
+then you have to push
+docker push sathishcloud/ngnixsathish
+
+
+================================================================================== 
+
+How to create a image to file ?
+How to save image like tar/zip file?
+
+
+DOCKER SAVE -o /opt/(name).tar [image id]
+DOCKER SAVE -o /opt/(name).zip [image id]
+
+How to restore our backup file to image?
+
+docker load -i sathish.tar
+
+docker load -i a1.tar
+
+=================================================================================
+
+How to create CONTIANER TO  IMAGE ?
+
+docker commit [container id] image name
+DOCKER COMMIT  [container id] [image name]
+
+================================================================================
+
+
+
+How to delete docker images and containers at a time?
+
+docker rmi -f $(docker images -a or -q)
+docker rm -f $(docker ps -a)
+
+
+***********************************************************
+
+linux application running path " /var/run "
+
+Dockerfile		file name shoud be give "Dockerfile"
+CAPS			Left side
+FROM  			[ OS , AMI ]
+MAINTAINER 	who created this image
+RUN 			running commands of your operating system
+ENV				" /var/run "
+ 				about tool dependent environment 
+				default things Like:- " USER,GROUP,LOG DIR,RUN DIR "
+EXPOSE			your applications PORT num
+COPY 			you have to use this command your docker directory uses for this command copy your docker dependancy file 
+CMD			
+ENTRYPOINT	
+WORKDIR		your working directory
+
+
+
+=====================================================================================

@@ -1,0 +1,269 @@
+================================================================
+--------------------------------------DOCKER PART-2----------------------------------------------
+================================================================
+APT INSTALL DOCKER.IO
+DOCKER PS - showing containers
+DOCKER IMAGES - showing images
+DOCKER RUN - execute
+DOCKER RMI  - removing docker images
+DOCKER START - containers startup 
+DOCKER STOP - container stop
+DOCKER EXEC  - IT - container exe
+DOCKER PS -A - showing all containers
+DOCKER PULL - get docker container from docker hub
+docker volume ls
+docker inspect
+DOCKER RUN -itd --name -p "0000:00" -v "/root/html:/usr/local/apache2/htdocs" httpd {bind volume}
+DOCKER RUN -itd  --mount source=my-volume,destination=/usr/local/apache2/htdocs -p "0000:00" httpd {normal voume}
+<html><body><h1>It works!</h1></body></html>
+DOCKER --help
+DOCKER RUN -itd --name apache001 -p 0000:00 -v /usr/local/apache2/htdcos httpd
+DOCKER RUN -itd --name ssh001 -p 0000:00 --volumes-from httpd[volume container] ssh
+DOCKER STATS
+
+
+====================================================================
+
+
+" os and vim/git package file"
+
+
+FROM amazonlinux				- image name like AMI
+MAINTAINER  sathish				- maintainers name
+RUN  yum install git vim unzip -y
+:wq!
+
+( . )
+&&
+
+docker build -t vimimage .
+docker run -itd --name vimcon vimimage
+
+=======================================================================
+
+FROM amazonlinux
+MAINTAINER sathish
+RUN yum install vim -y
+
+:wq!
+docker build -t vimimage
+
+FROM amazonlinux
+MAINTAINER sathish
+RUN yum install vim -y
+RUN yum install wget -y
+or RUN yum install vim wget -y
+
+
+:wq!
+===========================================================================
+
+
+* * * * *
+"COPY FILE"
+
+
+FROM nginx
+MAINTAINER sathish
+WORKDIR /usr/share/nginx/html
+COPY . .
+ADD . .
+
+app.zip
+
+COPY
+Used to copy files and directories from the host system 
+Does not automatically extract compressed files (.tar, .zip, etc.).
+Does not support downloading files from a URL.
+
+ADD
+Similar to COPY, but with additional features.
+Can extract compressed files (.tar, .tar.gz, etc.).
+Can fetch remote files from a URL and add them to the image.
+:wq!
+
+
+===========================================================================
+* * * * *
+
+
+FROM myimage:v1.0
+LABLE Name="sathish"
+RUN yum install vim -y
+RUN yum install git -y
+:wq!
+
+
+#docker build -t myimage:v2.0   .
+==========================================================================
+
+
+
+FROM python:3
+WORKDIR /usr/src/app
+COPY  . . or test.py /usr/src/app
+ENTRYPOINT python3 test.py
+
+vi test.py
+print ("Enter a name")
+name = input( )
+print ( "Hello" , name )
+
+=============================================================================
+
+
+FROM ubuntu
+LABEL name=sathish
+RUN apt update -y
+RUN apt install apache2 -y
+WORKDIR /usr/local/apache2/htdocs
+COPY index.html
+CMD [ "apache2ctl", "-D", "FOREGROUND" ]
+
+
+
+
+==============================================================================
+
+
+*APACHE FILE*
+
+FROM ubuntu
+MAINTAINER sathish
+RUN apt-get update && apt-get install -y apache2
+RUN mkdir /var/run/apache2
+ENV APACHE_RUN_user www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+ENV APACHE_RUN_DIR /var/run/apache2
+EXPOSE 80
+CMD ["/usr/sbin/apache2", "-D" , "FOREGROUND"]
+
+
+
+:wq!
+
+docker logs *container id*
+
+
+env APACHE_RUN_DIR=/var/run/apache2
+env APACHE_RUN_USER=www-data
+env APACHE_RUN_GROUP=www-data
+env APACHE_LOG_DIR=/var/log/apache2
+
+
+${APACHE_PID_FILE}
+${APACHE_RUN_USER}
+${APACHE_RUN_GROUP}
+${APACHE_LOG_DIR} 
+
+
+PROCESS ID
+
+universal --
+user-www-data
+group-www-data
+
+
+==============================================================================
+
+* * * * *
+
+"OPEN SSH- SERVER FILE"
+
+Container and  user / password creations?
+
+
+FROM ubuntu
+MAINTAINER sathish
+RUN apt update -y
+RUN apt install openssh-server vim -y
+RUN sed -i 's/#PermitRootLogin prohibit-password/permitRootLogin yes/ ' /etc/ssh/sshd_config
+RUN echo 'root:root123' | chpasswd
+RUN mkdir /var/run/sshd
+CMD [ "/usr/sbin/sshd",  "-D" ]
+EXPOSE 22
+
+
+cd /etc/ssh/vi ssh_config
+
+DOCKER RUN -itd --name apache001 -p 0000:00 -v /usr/local/apache2/htdcos httpd
+DOCKER RUN -itd --name ssh001 -p 0000:00 --volumes-from apache001[volume container] ssh
+
+
+
+"/bin/sh -c '[\"/usr/…"
+
+=========================================================
+**********************VOLUME***************************
+==========================================================
+Step 001 :-
+-----------------
+
+
+mkdir /root/html
+/usr/local/apache2/htdocs
+-v = volumes
+docker run -itd --name  apache002 -p "2020:80" -v "/root/html:/usr/local/apache2/htdocs" httpd
+docker inspect
+docker volume create my-volume
+docker volume ls
+docker inspect my-volume
+	=  "/var/lib/docker/volumes/my-vol/_data"
+	=  cd /var/lib/docker/volumes/my-vol/_data
+	= docker run -itd  --mount source=my-volume,destination=/usr/local/apache2/htdocs -p "0000:00" httpd
+
+
+*************************************************************************************************
+
+
+TASK : SHELL vs EXEC difference?
+
+Shell -> RUN		yun install httpd
+EXEC -> RUN	[ "yum", "install" , "httpd"]
+
+
+
+***********************************************************
+
+linux application running path " /var/run "
+
+Dockerfile		file name shoud be give "Dockerfile"
+CAPS			Left side
+FROM  			[ OS , AMI ]
+MAINTAINER 	who created this image
+RUN 			running commands of your operating system
+ENV				" /var/run "
+ 				about tool dependent environment 
+				default things Like:- " USER,GROUP,LOG DIR,RUN DIR "
+EXPOSE			your applications PORT num
+COPY 			you have to use this command your docker directory uses for this command copy your docker dependancy file 
+CMD			
+ENTRYPOINT	
+WORKDIR		your working directory
+
+***************************************************************
+
+$ sudo apt-get install curl
+$ curl -sl https://deb.nodesource.com/setup_x | sudo -E bash -$
+$ sudo apt-get install nodejs
+$ sudo apt update 
+$ sudo apt install ngnix
+$ git clone <your_git_repo_address>
+$ cd <react_app>
+$ npm install 
+
+npm started put your URL in your browser hhtpd://yourserverip:3000
+
+
+
+
+
+
+
+
+
+
+
+
+.

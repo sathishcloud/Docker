@@ -1,0 +1,93 @@
+Docker compose
+
+: tool for defining & running multi-container docker applications
+: Compose is tool for orchestrating env made of  multiple containers
+
+Microservices ex:
+https://www.google.com/search?q=microservices+example&source=lnms&tbm=isch&sa=X&ved=2ahUKEwj0uprX-tXmAhUdxzgGHRNOAEkQ_AUoAXoECBEQAw&biw=1366&bih=657#imgrc=4466IjbSng_wcM:
+
+: use yaml files to configure application services (docker-compose.yml)
+: can start all services with a single command : docker compose up
+: can stop all services with a single command : docker compose down
+: can scale up selected services when required
+
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+
+Step 2 : Create docker compose file at any location on your system
+docker-compose version
+mkdir Dockercomposefile
+cd Dockercomposefile/
+vi docker-compose.yml
+
+Step 3 : Check the validity of file by command
+docker-compose config
+vi docker-compose.yml
+docker-compose config
+
+Step 4 : Run docker-compose.yml file by command
+docker-compose up -d
+docker ps
+
+Steps 5 : Bring down application by command
+docker-compose down
+docker ps
+
+vi docker-compose.yml
+docker-compose config
+Port change
+
+version: '3'
+
+services:
+
+  web:
+    image: nginx
+    ports:
+    - 8081:80
+  database:
+    image: redis
+
+
+version: '2'
+services:
+  hello:
+    image: tutum/hello-world
+    ports:
+      - 80:80
+
+curl localhost:80 -- verify its working
+
+
+
+Example 3:
+
+version: '2'
+services:
+  wordpress:
+    image: wordpress:4.5
+    links:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_PASSWORD: example
+    restart: always
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+
+scaling services
+
+docker-compose up -d --scale database=4
+docker-compose down
+docker ps

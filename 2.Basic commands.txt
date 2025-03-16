@@ -1,0 +1,37 @@
+
+export PS1="\u$ "  -- to shorten details of logon info
+
+use command --help to view more info on commands
+
+********
+Basic
+: docker version
+: docker -v
+: docker info
+: docker --help
+: docker login
+
+
+********
+Images
+: docker images
+: docker pull
+: docker rmi
+
+
+********
+Containers
+: docker ps
+: docker run
+: docker start
+: docker stop
+
+
+********
+System
+: docker stats
+: docker system df
+: docker system prune
+
+
+An unused image means that it has not been assigned or used in a container -- dangling image

@@ -1,0 +1,209 @@
+==================================
+----------------------PART-4--------------------
+==================================
+
+Ctrl zz
+
+
+* networking *
+
+docker network ls
+
+
+[ "bridge"	-  default out side of the world we use in internet ]
+
+ ( -p forwarding -P binding)
+
+
+[ "host"		-  not isolated its lock our base machine ]
+
+host network should lock out ip in our base machine ( if we have to run httpd contianer it should lock our 80 port )
+
+
+[  "null" 		-  isolated or non networks  ]
+
+like:- database,internal use we use null networks
+
+
+docker run -itd --name c1 alpine 
+172.17.0.2
+docker run -itd --name c2 alpine
+172.17.0.3
+
+login our alpine container
+
+docker exec -it cf6412ef21aa sh
+# ping 172.17.0.3  * ping *
+# ping c1 		* not ping *
+
+"network creation commands"
+
+docker network create --driver bridge sathish
+
+
+docker run -itd --name a1 --network sathishb alpine
+"172.18.0.2"
+docker run -itd --name a2 --network sathishb alpine
+"172.18.0.3"
+
+docker exec -it a42dccbf7dcf sh
+
+# ping 172.20.0.3	*ping*
+# ping a2 		*ping*
+
+**********connectivity is more power full than default networks***********
+
+docker network create \
+					--driver=bridge \
+					--subnet=172.28.0.0/16 \
+					--ip-range=172.28.5.0/24 \
+					--gateway=172.28.5.24 \
+					sathish
+
+
+"172.28.5.0"
+"172.28.5.1"
+=============================================================================================================================
+
+
+"word press"
+word press is a most popular website maker
+word press is first used blog making then now only changed vlog
+word press is only support "my sql" and "maria db"
+
+docker run -itd --name wordpress -p "8000:80" wordpress
+
+"my sql"
+
+3306
+
+
+
+"mysql" 
+my sql is a database structured query language
+
+
+docker run -itd --name mysqlc1 mysql:latest
+docker run -itd --name mysqlc1 -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+
+Database name
+Database username
+Database password
+Database host
+
+
+----
+
+#docker run -itd --name mysqlc1 -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=wpdb -e MYSQL_USER=wpuser -e MYSQL_PASSWORD=wppw mysql:5.5
+
+-e MYSQL_ROOT_PASSWORD=admin
+-e MYSQL_DATABASE=wpdb
+-e MYSQL_USER=wpuser
+-e MYSQL_PASSWORD=wppw
+
+mysql -p 
+show databases;
+create database sample;
+sampledb;
+exit
+
+
+# docker run -itd --name wordpressc2 --link mysqlc1 -p 8002:80 -e WORDPRESS_DB_HOST=mysqlc1:3306 -e WORDPRESS_DB_NAME=wpdb -e WORDPRESS_DB_USER=wpuser -e WORDPRESS_DB_PASSWORD=wppw wordpress
+
+
+# docker run -itd --name worpress --link mysqlcon001 -p 8002:80 
+-e WORDPRESS_DB_HOST=mysqlc:3306 
+-e WORDPRESS_DB_NAME=wpdb 
+-e WORDPRESS_DB_USER=wpuser 
+-e WORDPRESS_DB_PASSWORD=wppw 
+wordpress
+
+
+
+
+====================================================================================================
+
+*Docker compose*
+
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04
+
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose --version
+
+"example - 001"
+vi docker-compose.yaml
+
+version: '2'
+services:
+  wordpress:
+    image: wordpress:4.5
+    links:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_PASSWORD: example
+    restart: always
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+# docker-compose up -d
+# docker-compose down
+
+================================================================================================================================
+
+https://docs.docker.com/compose/reference/
+
+
+Usage:  docker compose [OPTIONS] COMMAND
+
+Define and run multi-container applications with Docker.
+
+Options:
+      --ansi string                Control when to print ANSI control characters ("never"|"always"|"auto") (default "auto")
+      --compatibility              Run compose in backward compatibility mode
+      --env-file stringArray       Specify an alternate environment file.
+  -f, --file stringArray           Compose configuration files
+      --parallel int               Control max parallelism, -1 for unlimited (default -1)
+      --profile stringArray        Specify a profile to enable
+      --project-directory string   Specify an alternate working directory
+                                   (default: the path of the, first specified, Compose file)
+  -p, --project-name string        Project name
+
+Commands:
+  build       Build or rebuild services
+  config      Parse, resolve and render compose file in canonical format
+  cp          Copy files/folders between a service container and the local filesystem
+  create      Creates containers for a service.
+  down        Stop and remove containers, networks
+  events      Receive real time events from containers.
+  exec        Execute a command in a running container.
+  images      List images used by the created containers
+  kill        Force stop service containers.
+  logs        View output from containers
+  ls          List running compose projects
+  pause       Pause services
+  port        Print the public port for a port binding.
+  ps          List containers
+  pull        Pull service images
+  push        Push service images
+  restart     Restart service containers
+  rm          Removes stopped service containers
+  run         Run a one-off command on a service.
+  start       Start services
+  stop        Stop services
+  top         Display the running processes
+  unpause     Unpause services
+  up          Create and start containers
+  version     Show the Docker Compose version information
+
+Run 'docker compose COMMAND --help' for more information on a command.
